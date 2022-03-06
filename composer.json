@@ -20,7 +20,8 @@
         "lcobucci/jwt": "^3.2",
         "nexmo/client": "^2.4",
         "nexmo/laravel": "^3.0",
-        "tymon/jwt-auth": "*"
+        "tymon/jwt-auth": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
