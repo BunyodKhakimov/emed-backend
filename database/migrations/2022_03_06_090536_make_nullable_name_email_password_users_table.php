@@ -28,9 +28,9 @@ class MakeNullableNameEmailPasswordUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->string('name')->change();
+            $table->string('email')->change();
+            $table->string('password')->change();
         });
     }
 }
