@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/register', 'AuthController@refister')->name('custom.register');
 
 Route::get('/verify', 'AuthController@verify')->name('custom.verify');
+
+    Route::prefix('auth')->middleware('api')->post('login', 'AuthController@login')->name('api.login');
+    Route::prefix('auth')->middleware(['jwt.auth', 'api'])->post('logout', 'AuthController@logout')->name('api.logout');
+    Route::prefix('auth')->middleware(['jwt.auth', 'api'])->post('refresh', 'AuthController@refresh')->name('api.refresh');
+    Route::prefix('auth')->middleware(['jwt.auth', 'api'])->post('me', 'AuthController@me')->name('api.me');
