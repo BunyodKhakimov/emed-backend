@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\User;
 use App\VerificationCode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Vonage\Client;
 use Vonage\Client\Credentials\Basic;
+use Vonage\SMS\Message\SMS;
 
 class AuthController extends Controller
 {
@@ -18,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify']]);
     }
 
     /**
@@ -88,8 +90,8 @@ class AuthController extends Controller
     public function verify(Request $request)
     {
         $request->validate([
-            'verification_code' => ['required', 'numeric'],
-            'phone_number' => ['required', 'string'],
+            'verification_code' => 'required|numeric',
+            'phone_number' => 'required|numeric',
         ]);
 
         if (!VerificationCode::where('verifiable_by', $request->phone_number)
@@ -102,33 +104,36 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::create(array(
-            'phone_number' => $request->phone_number,
-            'isVerified' => true,
-        ));
-
-        // generate token
-        // assign token to user
-        // send token as response
+        $user = User::where('phone_number', $request->phone_number)->get();
+        $user->isVerified = true;
 
         return response()->json([
             'message' => 'Verified successfully',
         ]);
     }
 
-    public function register(Request $request)
+    public function register(UserRequest $request)
     {
-        $request->validate([
-            'phone_number' => 'required|regex:/^998[39][012345789][0-9]{7}$/',
-        ]);
+        $data = $request->validated();
 
+        User::firstOrCreate(
+            ['phone_number' => $data['phone_number']],
+            $data
+        );
+
+        return $this->sendMessageResponse($data['phone_number']);
+
+    }
+
+    private function sendMessageResponse($phone_number)
+    {
         // generate code
-        $code = rand (1000, 9999);
+        $code = rand(1000, 9999);
 
         // create VerificationCode entity
         $verificationCode = new VerificationCode();
         $verificationCode->code = $code;
-        $verificationCode->verifiable_by = $request->phone_number;
+        $verificationCode->verifiable_by = $phone_number;
         $verificationCode->expires_at = Carbon::now()->addMinutes(2);
 
         // send message to mobile phone
@@ -136,21 +141,16 @@ class AuthController extends Controller
         $client = new Client($basic);
 
         $response = $client->sms()->send(
-            new SMS($request->phone_number, 'E-Med', "Your verification code is $code.\n")
+            new SMS($phone_number, 'E-Med', "Your verification code is $code.\n")
         );
 
         $message = $response->current();
 
         if ($message->getStatus() == 0) {
             $verificationCode->save();
-            return response()->json([
-                'message' => 'The message was sent successfully',
-            ]);
+            return response()->json(['message' => 'The message was sent successfully']);
         } else {
-            return response()->json([
-                'message' => 'The message failed with status: ' . $message->getStatus(),
-            ]);
+            return response()->json(['message' => 'The message failed']);
         }
-
     }
 }
