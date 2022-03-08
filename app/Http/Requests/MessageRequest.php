@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class MessageRequest extends FormRequest
 {
@@ -28,5 +30,17 @@ class MessageRequest extends FormRequest
             'to' => 'required|numeric|exists:users,id',
             'body' => 'required|string',
         ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.*
+     * @param Validator $validator
+     * @return void
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }
