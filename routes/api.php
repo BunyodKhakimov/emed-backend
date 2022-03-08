@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::get('auth/register', 'AuthController@register')->name('custom.register');
-Route::get('auth/verify', 'AuthController@verify')->name('custom.verify');
+Route::post('auth/register', 'AuthController@register')->name('custom.register');
+Route::post('auth/verify', 'AuthController@verify')->name('custom.verify');
 
 Route::middleware('api')->post('auth/login', 'AuthController@login')->name('api.login');
 Route::middleware(['jwt.auth', 'api'])->post('auth/logout', 'AuthController@logout')->name('api.logout');
