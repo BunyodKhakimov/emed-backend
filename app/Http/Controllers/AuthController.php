@@ -104,8 +104,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::where('phone_number', $request->phone_number)->get();
-        $user->isVerified = true;
+        User::where('phone_number', $request->phone_number)->update(['isVerified' => true]);
 
         return response()->json([
             'message' => 'Verified successfully',
@@ -115,6 +114,8 @@ class AuthController extends Controller
     public function register(UserRequest $request)
     {
         $data = $request->validated();
+
+        $data['password'] = bcrypt($data['password']);
 
         User::firstOrCreate(
             ['phone_number' => $data['phone_number']],
