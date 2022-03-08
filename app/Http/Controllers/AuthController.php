@@ -34,6 +34,8 @@ class AuthController extends Controller
 
         if (! $token = auth()->guard('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
+        } elseif (! auth()->user()->isVerified) {
+            return response()->json(['error' => 'Unverified'], 403);
         }
 
         return $this->respondWithToken($token);
