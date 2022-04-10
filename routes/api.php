@@ -31,3 +31,14 @@ Route::middleware(['jwt.auth', 'api'])->get('conversations/show/{conversation}',
 
 Route::middleware(['jwt.auth', 'api'])->post('messages/store', 'MessageController@store');
 Route::middleware(['jwt.auth', 'api'])->delete('messages/destroy/{message}', 'MessageController@destroy');
+
+Route::middleware(['jwt.auth', 'api'])->get('doctors/index', 'DoctorController@index');
+Route::middleware(['jwt.auth', 'api'])->get('doctors/show/{doctor}', 'DoctorController@show');
+Route::middleware(['jwt.auth', 'api'])->post('doctors/store', 'DoctorController@store');
+Route::middleware(['jwt.auth', 'api'])->put('doctors/update/{doctor}', 'DoctorController@update');
+Route::middleware(['jwt.auth', 'api'])->delete('doctors/destroy/{doctor}', 'DoctorController@destroy');
+
+Route::middleware(['jwt.auth', 'api'])->get('patients/show/{patient}', 'PatientController@show');
+Route::middleware(['jwt.auth', 'api'])->post('patients/store', 'PatientController@store');
+Route::middleware(['jwt.auth', 'api'])->put('patients/update/{patient}', 'PatientController@update');
+Route::middleware(['jwt.auth', 'api'])->delete('patients/destroy/{patient}', 'PatientController@destroy');
