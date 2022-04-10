@@ -80,4 +80,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Message::class, 'user_id', 'id');
     }
+
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class, 'patient_id', 'id');
+    }
 }
