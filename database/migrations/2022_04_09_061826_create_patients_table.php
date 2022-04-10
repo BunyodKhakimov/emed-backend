@@ -18,10 +18,10 @@ class CreatePatientsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('gender');
             $table->integer('age');
-            $table->float('height')->nullable()->default(NULL);
-            $table->float('weight')->nullable()->default(NULL);
-            $table->float('blood_pressure')->nullable()->default(NULL);
-            $table->float('temperature')->nullable()->default(NULL);
+            $table->float('height')->nullable()->default(0.0);
+            $table->float('weight')->nullable()->default(0.0);
+            $table->float('blood_pressure')->nullable()->default(0.0);
+            $table->float('temperature')->nullable()->default(0.0);
             $table->timestamps();
 
             $table->foreign('user_id')->on('users')->references('id')->cascadeOnDelete();
