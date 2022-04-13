@@ -48,3 +48,9 @@ Route::middleware(['jwt.auth', 'api'])->get('prescriptions/show/{prescription}',
 Route::middleware(['jwt.auth', 'api'])->post('prescriptions/store', 'PrescriptionController@store');
 Route::middleware(['jwt.auth', 'api'])->put('prescriptions/update/{prescription}', 'PrescriptionController@update');
 Route::middleware(['jwt.auth', 'api'])->delete('prescriptions/destroy/{prescription}', 'PrescriptionController@destroy');
+
+Route::middleware(['jwt.auth', 'api'])->get('appointments/index', 'AppointmentController@index');
+Route::middleware(['jwt.auth', 'api'])->get('appointments/show/{appointment}', 'AppointmentController@show');
+Route::middleware(['jwt.auth', 'api'])->post('appointments/store', 'AppointmentController@store');
+Route::middleware(['jwt.auth', 'api'])->put('appointments/update/{appointment}', 'AppointmentController@update');
+Route::middleware(['jwt.auth', 'api'])->delete('appointments/destroy/{appointment}', 'AppointmentController@destroy');
