@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
+use App\Traits\FailedValidation;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PrescriptionRequest extends FormRequest
 {
+    use FailedValidation;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,17 +39,5 @@ class PrescriptionRequest extends FormRequest
             'drugs.*.dose' => 'sometimes|string',
             'drugs.*.every_day' => 'sometimes|boolean',
         ];
-    }
-
-    /**
-     * Get the error messages for the defined validation rules.*
-     * @param Validator $validator
-     * @return void
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json([
-            'errors' => $validator->errors(),
-        ], 422));
     }
 }
