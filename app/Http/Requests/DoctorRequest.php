@@ -29,6 +29,7 @@ class DoctorRequest extends FormRequest
         return [
             'speciality' => 'required|string',
             'info' => 'required|string',
+            'profile_image' => 'sometimes|image:jpeg,png,jpg,gif,svg|max:2048',
             'patients' => 'sometimes|integer',
             'experience' => 'sometimes|integer',
             'rating' => 'sometimes|numeric',

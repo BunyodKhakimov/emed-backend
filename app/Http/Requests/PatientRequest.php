@@ -29,6 +29,7 @@ class PatientRequest extends FormRequest
         return [
             'gender' => ['required', 'string', 'regex:/^(?:male|female)$/'],
             'age' => 'required|integer',
+            'profile_image' => 'sometimes|image:jpeg,png,jpg,gif,svg|max:2048',
             'height' => 'sometimes|numeric',
             'weight' => 'sometimes|numeric',
             'blood_pressure' => 'sometimes|numeric',
