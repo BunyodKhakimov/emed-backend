@@ -20,6 +20,7 @@ class AppointmentResource extends JsonResource
             'time' => $this->time,
             'purpose' => $this->purpose,
             'is_approved' => $this->is_approved,
+            'is_canceled' => $this->is_canceled,
         ];
     }
 }
